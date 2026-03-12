@@ -1,0 +1,82 @@
+#installing dependancies:
+!pip install patchify "numpy<2"
+!pip install tensorflow
+
+#imports:
+from PIL import Image
+import os
+import numpy as np
+from patchify import patchify
+import tensorflow as tf
+from tensorflow.keras import layers, models
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Concatenate, Conv2DTranspose, Activation, Input
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+
+#full pipeline function:
+def pipeline(path):
+    files = sorted(os.listdir(path))
+    img_list = []
+
+    try:
+        while True:
+            second_start_index = int(input("Enter starting index: "))
+            second_end_index = int(input("Enter ending index (0 to stop): "))
+            if second_end_index == 0:
+                print("Stopped")
+                break
+
+            for j in range(second_start_index, second_end_index):
+                if j >= len(files):
+                    print(f"Index {j} out of range, skipping.")
+                    continue
+
+                img = Image.open(os.path.join(path, files[j]))
+                img = img.convert('L')  #grayscaling
+                img_list.append(img)
+
+            print(f"Loaded {len(img_list)} images.")
+
+    except Exception as e:
+        print("Error:", e)
+        return np.array([])
+
+    if not img_list:
+        return np.array([])
+
+#Resizing:
+    target_size = (256, 256)
+    batch_imgs = []
+    for img in img_list:
+        img = img.resize(target_size)  # resize
+        batch_imgs.append(np.array(img))
+
+    img_array = np.array(batch_imgs, dtype=np.uint8)
+    print("Image shapes:", [img.shape for img in img_array])  # should all be (256,256)
+
+#patching
+    patches = []
+    patch_size = (64, 64, 1)
+    step = (56, 56, 1)
+    for img in img_array:
+        #adding channel dimension
+        if img.ndim == 2:
+            img = img[..., np.newaxis]
+
+    #padding:
+        h, w, c = img.shape
+        pad_h = (patch_size[0] - h % patch_size[0]) % patch_size[0]
+        pad_w = (patch_size[1] - w % patch_size[1]) % patch_size[1]
+        img_padded = np.pad(img, ((0, pad_h), (0, pad_w), (0, 0)), mode='constant')
+
+        p = patchify(img_padded, patch_size, step=step)
+        patches.extend(p.reshape(-1, patch_size[0], patch_size[1], patch_size[2]))
+
+    # Normalizing:
+    normalized_patches = np.array(patches, dtype=np.float32) / 255.0
+
+    print("Total patches ready:", normalized_patches.shape)
+    return normalized_patches
