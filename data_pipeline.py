@@ -108,25 +108,6 @@ len(patched_arr[0])
 # num_list_cols=[]
 # pixels=[]
 
-# for i in range(0,4):
-#     for j in range (0,len(patched_arr[i])):
-#         for k in range (0, len(patched_arr[i][j])):
-#             for a in range (0, len(patched_arr[i][j][k])):
-#                 for b in range (0, len(patched_arr[i][j][k][a])):
-#                     for c in range (0, len(patched_arr[i][j][k][a][b])):
-#                         num_list_img.append(i)
-#                         num_list_subimg.append (j)
-#                         num_list_cols.append (k)
-#                         pixels.append (patched_arr[i][j][k][a][b])
-            
-# df_patches=pd.DataFrame ({
-#     "Image number": num_list_img, 
-#     "Sub-image Number": num_list_subimg,
-#     "pixel numbers:": pixels})
-
-# df_patches.to_csv("/Users/blenl/Desktop/image_patches.csv", index=False)
-           
-            
 # %%
 num_list_img = []
 num_list_subimg = []
@@ -146,7 +127,7 @@ df_pixels.insert(0, 'Patch Col', num_list_patch)
 df_pixels.insert(0, 'Patch Row', num_list_subimg)
 df_pixels.insert(0, 'Image Number', num_list_img)
 
-df_pixels.to_csv("/Users/blenl/Desktop/image_patches.csv", index=False)
+df_pixels.to_csv("/enter path", index=False)
 
 
 
