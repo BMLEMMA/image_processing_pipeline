@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 11 14:48:13 2026
 
-@author: blenl
-"""
 
 # %%
 
@@ -81,7 +75,7 @@ def csv_file(file_name, patched_arr):
     
 #calling the function for training data:
 
-og_path= "/Users/blenl/Desktop/original_imgs"
+og_path= "path"
 img_arr_og= create_array(og_path)
 patched_array_og = patching(img_arr_og)
 csv_file("original_imgs", patched_array_og)
@@ -95,7 +89,7 @@ csv_file("original_imgs", patched_array_og)
 # patched_arr=patching(img_arr_seg)
 # csv_file ("segmented_imgs")
 
-seg_path=  "/Users/blenl/Desktop/segmented_imgs"
+seg_path=  "/path"
 img_arr_seg= create_array(seg_path)
 patched_array_seg = patching(img_arr_seg)
 csv_file("segmented_imgs", patched_array_seg)
